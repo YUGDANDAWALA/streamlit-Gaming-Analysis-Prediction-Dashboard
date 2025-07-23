@@ -1,277 +1,118 @@
-# 🎮 Esports Analytics Dashboard - Streamlit Version
+# 🎮 Esports & Gaming Analytics Dashboard (Streamlit)
 
-A comprehensive Streamlit application for analyzing esports data with interactive Python-based visualizations.
-
-## 🚀 Features
-
-- **Interactive Charts**: Bar charts, line charts, scatter plots, 3D visualizations, and heatmaps
-- **Real-time Data**: Live data from MySQL database
-- **Multiple Views**: Countries, Players, Tournaments, Teams, and Advanced Analytics
-- **Python-based**: No JavaScript required - all visualizations built with Plotly
-- **Responsive Design**: Beautiful UI with custom CSS styling
-
-## 📊 Dashboard Sections
-
-1. **Overview**: Welcome page with key metrics and statistics
-2. **Countries**: Analysis of countries by earnings and player count
-3. **Players**: Top players analysis with earnings and game distribution
-4. **Tournaments**: Tournament statistics and prize pool analysis
-5. **Teams**: Team revenue and tournament participation analysis
-6. **Data Analysis**: Advanced analytics including correlations and distributions
-
-## 🛠️ Installation
-
-### Prerequisites
-
-1. **Python 3.8+** installed on your system
-2. **MySQL Server** (XAMPP recommended for easy setup)
-3. **Esports Database** with the required tables
-
-### Setup Steps
-
-1. **Create project folder on D drive:**
-   ```
-   D:\Streamlit_Esports_Dashboard\
-   ```
-
-2. **Copy these files to your project folder:**
-   - `streamlit_main.py` → `app.py`
-   - `data_scraper_new.py` → `data_scraper.py`
-   - `requirements_streamlit.txt` → `requirements.txt`
-   - `README_Streamlit.md` → `README.md`
-
-3. **Open VS Code and open the project folder:**
-   - File → Open Folder → Select `D:\Streamlit_Esports_Dashboard`
-
-4. **Create virtual environment:**
-   ```bash
-   python -m venv venv
-   ```
-
-5. **Activate virtual environment:**
-   - **Windows:**
-     ```bash
-     venv\Scripts\activate
-     ```
-
-6. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-7. **Set up MySQL Database:**
-   - Start your MySQL server (XAMPP or standalone)
-   - Run the setup script to populate the database:
-   ```bash
-   python setup_database.py
-   ```
-   - Or manually run the data scraper:
-   ```bash
-   python data_scraper.py
-   ```
-
-## 🚀 Running the Application
-
-1. **Start the Streamlit app:**
-   ```bash
-   streamlit run app.py
-   ```
-
-2. **Open your browser** and navigate to the URL shown in the terminal (usually `http://localhost:8501`)
-
-3. **Explore the dashboard** using the sidebar navigation
-
-## 📈 Visualizations Included
-
-### Bar Charts
-- Top countries by earnings
-- Top players by earnings
-- Top tournaments by prize pool
-- Top teams by revenue
-
-### Line Charts
-- Player earnings rankings
-- Tournament prize pool trends
-
-### Scatter Plots
-- Countries: Earnings vs Players
-- Players: Earnings vs Ranking
-- Tournaments: Prize Pool vs Teams
-- Teams: Revenue vs Tournaments
-
-### 3D Scatter Plots
-- Interactive 3D visualizations for all data types
-
-### Pie Charts
-- Earnings distribution by game
-- Country earnings distribution
-
-### Heatmaps
-- Correlation matrix of all metrics
-
-## 🔧 Customization
-
-### Adding New Visualizations
-
-To add new charts, create new functions in the visualization section:
-
-```python
-def create_new_chart(df, x_col, y_col, title):
-    fig = px.new_chart_type(
-        df,
-        x=x_col,
-        y=y_col,
-        title=title,
-        template="plotly_white"
-    )
-    return fig
-```
-
-### Modifying Database Queries
-
-Edit the fetch functions to modify data retrieval:
-
-```python
-@st.cache_data(ttl=3600)
-def fetch_custom_data():
-    conn = get_db_connection()
-    query = "YOUR_CUSTOM_QUERY"
-    df = pd.read_sql(query, conn)
-    conn.close()
-    return df
-```
-
-### Styling
-
-Modify the CSS in the `st.markdown` section to customize the appearance:
-
-```python
-st.markdown("""
-<style>
-    .custom-class {
-        /* Your custom styles */
-    }
-</style>
-""", unsafe_allow_html=True)
-```
-
-## 📊 Database Schema
-
-The application expects the following MySQL tables:
-
-### Countries Table
-```sql
-CREATE TABLE countries (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    total_earnings BIGINT,
-    num_players INT,
-    top_game VARCHAR(100),
-    game_earnings BIGINT,
-    game_percent FLOAT
-);
-```
-
-### Players Table
-```sql
-CREATE TABLE players (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    player_id VARCHAR(100),
-    player_name VARCHAR(100),
-    total_earnings BIGINT,
-    main_game VARCHAR(100),
-    earnings_percent FLOAT
-);
-```
-
-### Tournaments Table
-```sql
-CREATE TABLE tournaments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    tournament_name VARCHAR(200),
-    prize_pool BIGINT,
-    game VARCHAR(100),
-    participate_team INT,
-    no_of_player INT
-);
-```
-
-### Teams Table
-```sql
-CREATE TABLE teams (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    team_name VARCHAR(255),
-    revenue INT,
-    tournaments_played INT
-);
-```
-
-## 🎯 Key Advantages Over Django Version
-
-1. **Python-First**: All visualizations created with Python code
-2. **Interactive**: Real-time interactivity without JavaScript
-3. **Easy Deployment**: Simple to deploy on Streamlit Cloud
-4. **Rapid Development**: Quick iteration and testing
-5. **Built-in Caching**: Automatic data caching for performance
-6. **Responsive Design**: Works on all device sizes
-
-## 🚀 Deployment
-
-### Local Development
-```bash
-streamlit run app.py
-```
-
-### Streamlit Cloud Deployment
-1. Push your code to GitHub
-2. Connect your repository to Streamlit Cloud
-3. Deploy with one click
-
-### Docker Deployment
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-EXPOSE 8501
-CMD ["streamlit", "run", "app.py"]
-```
-
-## 🔍 Troubleshooting
-
-### Database Connection Issues
-- Ensure MySQL server is running
-- Check database credentials
-- Verify database and tables exist
-
-### Missing Data Issues
-If you see "No data available" or missing tables:
-1. Run the setup script: `python setup_database.py`
-2. Check the database status in the Overview section of the dashboard
-3. Ensure your internet connection is working (data is scraped from esportsearnings.com)
-
-### Missing Dependencies
-```bash
-pip install --upgrade -r requirements.txt
-```
-
-### Port Issues
-- Change port if 8501 is occupied: `streamlit run app.py --server.port 8502`
-
-### Common Error Messages
-- **"Table doesn't exist"**: Run `python setup_database.py`
-- **"No data available"**: The scraper may have failed. Check internet connection and run setup again
-- **"Database connection failed"**: Make sure XAMPP/MySQL is running
-
-## 📝 License
-
-This project is open source and available under the MIT License.
-
-## 🤝 Contributing
-
-Feel free to submit issues and enhancement requests!
+A comprehensive, data-driven analytics platform for exploring the world of Esports and Casual Gaming. This project unifies competitive and mainstream gaming data, providing interactive visualizations and AI-powered behavioral insights through a modern Streamlit dashboard.
 
 ---
 
-**Enjoy exploring esports data with Python-powered visualizations! 🎮📊**
+## 📚 Project Overview
+
+This dashboard is designed to:
+- Integrate and analyze data from both Esports (competitive gaming) and Casual Gaming domains.
+- Provide a unified, interactive interface for exploring trends, performance, and engagement across the gaming industry.
+- Leverage machine learning to deliver personalized behavioral insights for gamers.
+
+The project combines web-scraped Esports data, curated CSV datasets for casual/industry trends, and a machine learning model for engagement prediction, all orchestrated within a modular, Python-based architecture.
+
+---
+
+## 🏗️ Architecture & Workflow
+
+### 1. **Data Acquisition & Ingestion**
+- **Web Scraping**: `data_scraper.py` scrapes live Esports data (countries, players, tournaments, teams) from esportsearnings.com, cleaning and inserting it into a local MySQL database (`esports_data`).
+- **CSV Import**: The same script also imports structured datasets for:
+  - `VideoGames.csv`: Historical and best-selling video games (platform, genre, sales, etc.)
+  - `Steam.csv`: Steam platform game stats (copies sold, playtime, reviews, etc.)
+  - `Gaming_trends.csv`: Industry-wide trends (revenue, player base, metacritic scores, etc.)
+  - `main_predict.csv`: User gaming profiles for ML engagement prediction.
+
+### 2. **Database Design**
+- All data is stored in a MySQL database (`esports_data`), with tables for each domain:
+  - `countries`, `players`, `tournaments`, `teams` (Esports)
+  - `VideoGames`, `SteamData`, `GamingTrends` (Casual/Industry)
+- The schema is designed for efficient analytics and visualization, with numeric, categorical, and time-series fields.
+
+### 3. **Backend & Data Access**
+- **SQLAlchemy** is used for robust, Pythonic database access.
+- **Streamlit Caching** ensures efficient, real-time data queries for the dashboard.
+- Each dashboard section has a dedicated data-fetching function, returning preprocessed Pandas DataFrames for visualization.
+
+### 4. **Dashboard & Visualization**
+- **Streamlit App (`app.py`)**: The main entry point, orchestrating navigation, data access, and rendering.
+- **Navigation**: Sidebar-driven, with four main categories:
+  - **General**: Overview and Unified Data Analysis (Esports + Casual)
+  - **Esports**: Countries, Players, Teams, Tournaments
+  - **Casual Gamers**: VideoGames, SteamData, GamingTrends
+  - **Behavioral Insights**: ML-powered engagement prediction
+- **Visualizations**: Built with Plotly, including bar, line, scatter, 3D scatter, pie, and heatmap charts. Each section provides both high-level and granular views of the data.
+- **Custom CSS**: Embedded for a modern, visually appealing, and responsive UI.
+
+### 5. **Machine Learning & Behavioral Insights**
+- **ML Model**: An XGBoost classifier is trained on `main_predict.csv` to predict user gaming engagement (High/Medium/Low) based on demographic and behavioral features.
+- **User Interaction**: Users input their gaming profile via a form; the model predicts engagement and provides personalized feedback and suggestions.
+- **ML Pipeline**: Includes label encoding, train/test split, model training, and real-time prediction within the dashboard.
+
+---
+
+## 🗂️ File-by-File Breakdown
+
+- **`app.py`**: Main Streamlit dashboard. Handles navigation, data fetching, all visualizations, and the ML engagement prediction interface.
+- **`data_scraper.py`**: Scrapes Esports data, imports CSVs, and inserts all data into the MySQL database. Contains table creation logic and data cleaning routines.
+- **`setup_database.py`**: Orchestrates initial setup: checks MySQL connection, runs the scraper, and ensures all tables are created and populated.
+- **`VideoGames.csv`**: Dataset of video game sales, platforms, genres, and publishers for casual gaming analytics.
+- **`Steam.csv`**: Steam platform dataset with game sales, playtime, reviews, and developer/publisher info.
+- **`Gaming_trends.csv`**: Industry trends dataset, including revenue, player base, metacritic scores, and trending status.
+- **`main_predict.csv`**: User gaming profiles for training and running the ML engagement prediction model.
+- **`requirements.txt`**: Lists all Python dependencies (Streamlit, Plotly, Pandas, SQLAlchemy, XGBoost, etc.).
+
+---
+
+## 🗄️ Database Schema (Key Tables)
+
+- **countries**: name, total_earnings, num_players, top_game, game_earnings, game_percent
+- **players**: player_id, player_name, total_earnings, main_game, earnings_percent
+- **tournaments**: tournament_name, prize_pool, game
+- **teams**: team_name, revenue, tournaments_played
+- **VideoGames**: Rank, Name, Platform, Year, Genre, Publisher, NA_Sales, EU_Sales, JP_Sales, Other_Sales, Global_Sales
+- **SteamData**: name, releaseDate, copiesSold, price, revenue, avgPlaytime, reviewScore, publisherClass, publishers, developers, steamId
+- **GamingTrends**: Game Title, Genre, Platform, Release Year, Developer, Revenue, Players, Peak Concurrent Players, Metacritic Score, Esports Popularity, Trending Status
+
+---
+
+## 📊 Dashboard Sections (Detailed)
+
+### **General**
+- **Overview**: Project introduction, key metrics, and visual summary of the gaming landscape.
+- **Unified Data Analysis**: Comparative analytics between Esports and Casual gaming, including correlation matrices, trend lines, and key insights.
+
+### **Esports**
+- **Countries**: Top-earning nations, player bases, and favorite games. Visualizations include bar, pie, line, scatter, and 3D plots.
+- **Players**: Highest-earning players, their main games, and earnings share. Includes ranking, distribution, and bubble plots.
+- **Teams**: Leading organizations, revenues, and tournament activity. Visualized with bar, pie, line, scatter, and 3D charts.
+- **Tournaments**: Major events, prize pools, and featured games. Includes grouped analytics and time-series trends.
+
+### **Casual Gamers**
+- **VideoGames**: Best-selling titles, platforms, genres, and review scores. Includes bar, pie, scatter, and heatmap visualizations.
+- **SteamData**: Steam's top games by sales, playtime, and reviews. Visualized with bar, pie, scatter, and heatmap charts.
+- **GamingTrends**: Industry-wide revenue, player base, trending genres, and metacritic scores. Includes bar, pie, scatter, and heatmap analytics.
+
+### **Behavioral Insights**
+- **ML Engagement Prediction**: Users enter their gaming profile; the dashboard predicts engagement level (High/Medium/Low) using an XGBoost model. Results include personalized feedback and suggestions, with visual and interactive elements.
+
+---
+
+## 🤖 Machine Learning Pipeline (Behavioral Insights)
+- **Input Features**: Age, Gender, Location, Game Genre, Play Time, In-Game Purchases, Game Difficulty, Sessions Per Week, Avg Session Duration, Player Level, Achievements Unlocked.
+- **Model**: XGBoost Classifier, trained on labeled engagement data.
+- **Output**: Predicted engagement class, with contextual feedback and suggestions for the user.
+- **Integration**: Real-time prediction and feedback within the Streamlit dashboard.
+
+---
+
+## 🎯 Project Goals & Impact
+- Bridge the gap between Esports analytics and mainstream gaming trends.
+- Provide a holistic, data-driven view of the gaming industry for analysts, gamers, and industry professionals.
+- Empower users with AI-driven insights into their own gaming behavior and engagement.
+
+---
+
+**This project is a showcase of unified gaming analytics, blending competitive and casual data with modern visualization and AI.**
